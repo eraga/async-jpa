@@ -1,0 +1,5 @@
+= RxJPA2
+
+RxJava2 Kotlin extensions wrapping blocking JPA2 operations.
+
+Based on JPA `javax.persistence-api` version 2.2.
