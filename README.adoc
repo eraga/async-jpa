@@ -1,5 +1,9 @@
 = RxJPA2
 
+[link="https://travis-ci.org/eraga/rxjpa2"]
+image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
+
+
 RxJava2 Kotlin extensions wrapping blocking JPA2 operations.
 
 Based on JPA `javax.persistence-api` version 2.2.
