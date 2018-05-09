@@ -1,12 +1,15 @@
-= RxJPA2 — JPA2 RxJava helpers
+= RxJPA2 — RxJava JPA2 helper functions
 
 [link="https://travis-ci.org/eraga/rxjpa2"]
 image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
 
 
-RxJava2 wrappers for blocking JPA2 operations using Kotlin extension functions.
+Library provides RxJava2 wrappers for blocking JPA2 operations written wit
+ Kotlin extension functions. Though it is pretty small in size it brings agility of
+ kotlin and RxJava to the full power of JPA.
 
-Based on JPA `javax.persistence-api` package version 2.2
+Tested providers are **Hibernate 5.2.12.Final** and **EclipseLink 2.6.5**, but should work with any
+other JPA2 provider.
 
 == How to use
 
@@ -15,7 +18,6 @@ Based on JPA `javax.persistence-api` package version 2.2
 Add custom maven repository
 ```gradle
 repositories {
-    mavenCentral()
     maven {
         url 'http://nexus.eraga.net/content/repositories/public-releases/'
     }
@@ -32,7 +34,10 @@ Latest version is `1.0.0`
 
 === Usage
 
-Purely synthetic example how to get a single row from database with cold start
+I assume you already had set up `persistence.xml` file and know the basics of JPA.
+
+Purely synthetic example how to retrieve and print a single Book title from database from cold start to release
+of connection:
 ```kotlin
 lateinit var entityManager: EntityManager
 lateinit var entityManagerFactory: EntityManagerFactory
@@ -112,12 +117,9 @@ entityManager
 ```
 
 
-
-
-
 === Using Schedulers
 
-Each rx extension function can accept a `Scheduler` instance as an argument
+Each extension can accept a `Scheduler` instance as an argument
 ```kotlin
 // Custom Scheduler
 entityManager
