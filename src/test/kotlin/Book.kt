@@ -7,12 +7,12 @@ import javax.persistence.*
  */
 @Entity
 data class Book(
-    var title: String = ""
+    var title: String = "",
+    var text: String = ""
 ) {
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
     @Column(name = "id")
     var id: Int? = null
 
-    var text = ""
 }

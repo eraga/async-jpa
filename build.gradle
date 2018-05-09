@@ -38,6 +38,9 @@ apply plugin: 'signing'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/releases'
+    }
 }
 
 junitPlatform {
@@ -63,12 +66,18 @@ dependencies {
 
     testImplementation "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 
-    testImplementation "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+//    testImplementation "org.hibernate:hibernate-entitymanager:$hibernateVersion"
 
     testImplementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.6.5'
 
 
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.197'
+
+    // NOSQL
+    testImplementation group: 'com.impetus.kundera.client', name: 'kundera-neo4j', version: '3.12'
+    testImplementation group: 'com.impetus.kundera.client', name: 'kundera-rdbms', version: '3.12'
+
+    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 }
 
 compileKotlin {
@@ -138,6 +147,7 @@ uploadArchives {
             developers {
                 developer {
                     id 'tntclaus'
+                    //noinspection GroovyAssignabilityCheck
                     name 'Klaus Schwartz'
                     email 'tntclaus@gmail.com'
                 }
