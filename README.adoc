@@ -29,7 +29,30 @@ compile "net.eraga.rxjpa2:helpers:1.0.0"
 
 Latest version is `1.0.0`
 
+
 === Usage
+
+Purely synthetic example how to get a single row from database with cold start
+```kotlin
+lateinit var entityManager: EntityManager
+lateinit var entityManagerFactory: EntityManagerFactory
+
+RxPersistence
+        .createEntityManagerFactory("rxJpa2-test")
+        .flatMap {
+            entityManagerFactory = it
+            it.rxCreateEntityManager()
+        }.flatMap {
+            entityManager = it
+            it.rxFind(Book::class.java, 1)
+        }.subscribe { book ->
+            println(book.title)
+            entityManager.close()
+            entityManagerFactory.close()
+        }
+```
+
+==== Details
 
 `Persistence` static class was extended via `RxPersistence` kotlin object.
 It has exactly the same methods as `Persistence` except they are reactive.
@@ -43,7 +66,7 @@ RxPersistence
             emf.createEntityManager()
         })
         .subscribe {
-        // do something with entityManager instance
+            // do something with entityManager instance
         }
 ```
 
@@ -53,6 +76,8 @@ have got extension functions.
 
 For example `TypedQuery.resultList` can be accessed in reactive way like that:
 ```kotlin
+val entityManager: EntityManager = ... // instantiated somewhere else
+
 entityManager
         .createQuery("SELECT i From Employee i order by modified desc", Employee::class.java)
         .rxResultList()
