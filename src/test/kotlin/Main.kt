@@ -1,4 +1,3 @@
-import model.Book
 import net.eraga.rxjpa2.RxPersistence
 import net.eraga.rxjpa2.rxCreateEntityManager
 import net.eraga.rxjpa2.rxResultList
@@ -11,7 +10,7 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val entityManagerFactory = RxPersistence
-                .createEntityManagerFactory("rxJpa2-test")
+                .createEntityManagerFactory("rxJpa2-test-eclipse")
                 .blockingGet()
 
         val entityManager = entityManagerFactory
@@ -20,7 +19,7 @@ object Main {
 
         val firstResult = entityManager
                 .createQuery(
-                        "SELECT b From Book b where title = 'Unit Test Hibernate/JPA with in memory H2 Database'",
+                        "SELECT b From Book b where b.title = 'Unit Test'",
                         Book::class.java)
                 .rxResultList()
                 .blockingGet()

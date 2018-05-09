@@ -3,10 +3,10 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="rxJpa2-test" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="H2 Hibernate" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<!-- add classes -->
-		<class>model.Book</class>
+		<class>Book</class>
 
 		<properties>
 			<!-- Configuring JDBC properties -->
@@ -15,36 +15,44 @@
 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
 
 			<!-- Hibernate properties -->
-			<!--<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
 			<property name="hibernate.format_sql" value="false"/>
 			<property name="hibernate.show_sql" value="true"/>
 			<!--<property name="hibernate.connection.pool_size" value="1"/>-->
 		</properties>
 	</persistence-unit>
 
-	<persistence-unit name="rxJpa2-test-eclipse" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="H2 EclipseLink" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<!-- add classes -->
-		<class>model.Book</class>
+		<class>Book</class>
 
 		<properties>
 			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
 
 			<!-- Configuring JDBC properties -->
-			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:create.sql'\;RUNSCRIPT FROM 'classpath:data.sql'"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
 
 			<property name="eclipselink.logging.level.sql" value="FINE"/>
 			<property name="eclipselink.logging.parameters" value="true"/>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="H2 EclipseLink" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<!-- add classes -->
+		<class>Book</class>
 
-			<!-- Hibernate properties -->
-			<!--<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
+		<properties>
+			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
 
-			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
-			<!--<property name="eclipselink.ddl-generation.output-mode" value="database" />-->
-			<!--<property name="eclipselink.cache.shared.default" value="false"/>-->
+			<!-- Configuring JDBC properties -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
 
+			<property name="eclipselink.logging.level.sql" value="FINE"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>

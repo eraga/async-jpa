@@ -1,5 +1,3 @@
-package model
-
 import javax.persistence.*
 
 
@@ -8,7 +6,6 @@ import javax.persistence.*
  * Time: 18:24
  */
 @Entity
-@Table(name = "Book")
 data class Book(
     var title: String = ""
 ) {

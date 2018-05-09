@@ -1,9 +1,11 @@
-import model.Book
+package hibernate
+
+import Book
 import net.eraga.rxjpa2.*
-import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.jetbrains.spek.subject.SubjectSpek
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import kotlin.test.*
@@ -12,15 +14,16 @@ import kotlin.test.*
  * Date: 08/05/2018
  * Time: 21:23
  */
-class RxEntityManagerSpec : Spek({
+object RxEntityManagerSpec : SubjectSpek<String>({
+    subject { "H2 Hibernate" }
+
     lateinit var entityManager: EntityManager
     lateinit var entityManagerFactory: EntityManagerFactory
 
-    given("EntityManager with H2 memory db") {
+    given("$subject persistence unit") {
         beforeEachTest {
-            println("Creating Manager")
             entityManagerFactory = RxPersistence
-                    .createEntityManagerFactory("rxJpa2-test")
+                    .createEntityManagerFactory(subject)
                     .blockingGet()
 
             entityManager = entityManagerFactory
@@ -29,7 +32,6 @@ class RxEntityManagerSpec : Spek({
         }
 
         afterEachTest {
-            println("Stopping Manager")
             entityManager.close()
             entityManagerFactory.close()
         }

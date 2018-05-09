@@ -1,9 +1,11 @@
+package hibernate
+
 import net.eraga.rxjpa2.RxPersistence
 import net.eraga.rxjpa2.rxCreateEntityManager
-import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.jetbrains.spek.subject.SubjectSpek
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import javax.persistence.SynchronizationType
@@ -14,18 +16,18 @@ import kotlin.test.assertFails
  * Date: 08/05/2018
  * Time: 22:39
  */
-class RxEntityManagerFactorySpec : Spek({
+object RxEntityManagerFactorySpec : SubjectSpek<String>({
+    subject { "H2 Hibernate" }
+
     var entityManager: EntityManager? = null
     lateinit var entityManagerFactory: EntityManagerFactory
 
 
-    given("EntityManagerFactory with H2 memory db") {
+    given("$subject persistence unit") {
         beforeEachTest {
             entityManagerFactory = RxPersistence
-                    .createEntityManagerFactory("rxJpa2-test")
+                    .createEntityManagerFactory(subject)
                     .blockingGet()
-
-
         }
 
         afterEachTest {

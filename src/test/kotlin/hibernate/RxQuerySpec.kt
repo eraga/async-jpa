@@ -1,9 +1,11 @@
-import model.Book
+package hibernate
+
+import Book
 import net.eraga.rxjpa2.*
-import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.jetbrains.spek.subject.SubjectSpek
 import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
@@ -13,16 +15,17 @@ import kotlin.test.assertEquals
  * Date: 08/05/2018
  * Time: 23:22
  */
-class RxQuerySpec : Spek({
+object RxQuerySpec : SubjectSpek<String>({
+    subject { "H2 Hibernate" }
+
     lateinit var entityManager: EntityManager
     lateinit var entityManagerFactory: EntityManagerFactory
 
-    given("queries to H2 memory db") {
+    given("$subject persistence unit") {
         beforeEachTest {
             val properties = Properties()
-            properties.setProperty("javax.persistence.sql-load-script-source", "classpath:data.sql")
             entityManagerFactory = RxPersistence
-                    .createEntityManagerFactory("rxJpa2-test", properties)
+                    .createEntityManagerFactory(subject, properties)
                     .blockingGet()
 
             entityManager = entityManagerFactory
@@ -50,7 +53,7 @@ class RxQuerySpec : Spek({
 
                 val result = entityManager
                         .createQuery(
-                                "SELECT b From Book b where title like :title",
+                                "SELECT b From Book b where b.title like :title",
                                 Book::class.java
                         )
                         .setParameter("title", "%book")
@@ -64,7 +67,7 @@ class RxQuerySpec : Spek({
 
                 val result = entityManager
                         .createQuery(
-                                "SELECT b From Book b where title = :title",
+                                "SELECT b From Book b where b.title = :title",
                                 Book::class.java
                         )
                         .setParameter("title", "First book")
@@ -80,7 +83,7 @@ class RxQuerySpec : Spek({
 
                 val result = entityManager
                         .createQuery(
-                                "SELECT b From Book b where title like :title"
+                                "SELECT b From Book b where b.title like :title"
                         )
                         .setParameter("title", "%book")
                         .rxResultList()
@@ -93,7 +96,7 @@ class RxQuerySpec : Spek({
 
                 val result = entityManager
                         .createQuery(
-                                "SELECT b From Book b where title = :title"
+                                "SELECT b From Book b where b.title = :title"
                         )
                         .setParameter("title", "Third book")
                         .setFirstResult(1)
@@ -107,7 +110,7 @@ class RxQuerySpec : Spek({
 
                 val result = entityManager
                         .createQuery(
-                                "SELECT b From Book b where title = :title"
+                                "SELECT b From Book b where b.title = :title"
                         )
                         .setParameter("title", "First book")
                         .rxSingleResult()
@@ -120,7 +123,7 @@ class RxQuerySpec : Spek({
                 entityManager.transaction
                 val result = entityManager
                         .createQuery(
-                                "DELETE From Book b where title = :title"
+                                "DELETE From Book b where b.title = :title"
                         )
                         .setParameter("title", "First book")
                         .rxExecuteUpdate(entityManager)
@@ -133,7 +136,7 @@ class RxQuerySpec : Spek({
                 entityManager.transaction.begin()
                 val result = entityManager
                         .createQuery(
-                                "DELETE From Book b where title = :title"
+                                "DELETE From Book b where b.title = :title"
                         )
                         .setParameter("title", "Second book")
                         .rxExecuteUpdate()
@@ -150,7 +153,7 @@ class RxQuerySpec : Spek({
 
                 val result1 = entityManager
                         .createQuery(
-                                "DELETE From Book b where title = :title"
+                                "DELETE From Book b where b.title = :title"
                         )
                         .setParameter("title", "Third book")
                         .rxExecuteUpdate(entityManager.transaction)
@@ -158,7 +161,7 @@ class RxQuerySpec : Spek({
 
                 val result2 = entityManager
                         .createQuery(
-                                "DELETE From Book b where title = :title"
+                                "DELETE From Book b where b.title = :title"
                         )
                         .setParameter("title", "Fourth book")
                         .rxExecuteUpdate(entityManager.transaction, true)
