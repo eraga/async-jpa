@@ -44,7 +44,8 @@ fun EntityManager.rxPersist(
         }
         it.onComplete()
     } catch (e: Exception) {
-        transaction.rollback()
+        if(transaction.isActive)
+            transaction.rollback()
         it.onError(e)
     }
 }.subscribeOn(scheduler ?: Schedulers.io())
