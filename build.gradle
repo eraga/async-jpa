@@ -44,7 +44,6 @@ junitPlatform {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
-//    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$jpa2apiVersion"
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
 
@@ -56,10 +55,7 @@ dependencies {
 
     testImplementation "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 
-    testImplementation ("org.hibernate:hibernate-entitymanager:$hibernateVersion") {
-//        exclude group: 'cglib', module: 'cglib'
-//        exclude group: 'dom4j', module: 'dom4j'
-    }
+    testImplementation "org.hibernate:hibernate-entitymanager:$hibernateVersion"
 
     testImplementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.6.5'
 
