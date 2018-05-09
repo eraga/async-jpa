@@ -1,9 +1,52 @@
-= RxJPA2
+= RxJPA2 — JPA2 RxJava helpers
 
 [link="https://travis-ci.org/eraga/rxjpa2"]
 image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
 
 
-RxJava2 Kotlin extensions wrapping blocking JPA2 operations.
+RxJava2 wrappers for blocking JPA2 operations using Kotlin extension functions.
 
-Based on JPA `javax.persistence-api` version 2.2.
+Based on JPA `javax.persistence-api` package version 2.2
+
+== How to use
+
+=== Library setup
+
+Add custom maven repository
+```gradle
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://nexus.eraga.net/content/repositories/public-releases/'
+    }
+}
+```
+
+Add gradle dependency to your project:
+```gradle
+compile "net.eraga.rxjpa:helpers:1.0.0"
+```
+
+Latest version is `1.0.0`
+
+=== Usage
+
+List all connected USB devices:
+```kotlin
+
+```
+
+Subscribe to bulk transfers' content and print it to `stdout` as soon as it comes with the power of `rxjava2`:
+```kotlin
+
+```
+
+Share bulk transfer data between two different parts of code and treat it differentely:
+```kotlin
+
+```
+
+Send data to USB device:
+```kotlin
+
+```
