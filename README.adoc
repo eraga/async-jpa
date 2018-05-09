@@ -24,29 +24,81 @@ repositories {
 
 Add gradle dependency to your project:
 ```gradle
-compile "net.eraga.rxjpa:helpers:1.0.0"
+compile "net.eraga.rxjpa2:helpers:1.0.0"
 ```
 
 Latest version is `1.0.0`
 
 === Usage
 
-List all connected USB devices:
+`Persistence` static class was extended via `RxPersistence` kotlin object.
+It has exactly the same methods as `Persistence` except they are reactive.
+
+
 ```kotlin
+RxPersistence
+        .createEntityManagerFactory("accountancy")
+        .observeOn(Schedulers.computation())
+        .map({
+            emf.createEntityManager()
+        })
+        .subscribe {
+        // do something with entityManager instance
+        }
+```
+
+On the other hand all blocking calls of `EntityManagerFactory`, `EntityManager`, `Query` and `TypedQuery` interfaces
+have got extension functions.
+
+
+For example `TypedQuery.resultList` can be accessed in reactive way like that:
+```kotlin
+entityManager
+        .createQuery("SELECT i From Employee i order by modified desc", Employee::class.java)
+        .rxResultList()
+        .subscribe {
+        // do something with List result
+        }
 
 ```
 
-Subscribe to bulk transfers' content and print it to `stdout` as soon as it comes with the power of `rxjava2`:
-```kotlin
-
+Persisting objects inside a single transaction have become much easier
+```
+entityManager
+        .rxTransaction {
+            it.persist(Book("Transaction book 1"))
+            it.persist(Book("Transaction book 2"))
+            it.persist(Book("Transaction book 3"))
+            it.persist(Book("Transaction book 4"))
+        }
+        .subscribe {
+            // do something on completion
+        }
 ```
 
-Share bulk transfer data between two different parts of code and treat it differentely:
-```kotlin
-
+Single persist operation is done inside a transaction
+```
+val book = Book("rxPersistBook")
+entityManager
+        .rxPersist(book)
+        .subscribe {
+            // do something on completion
+        }
 ```
 
-Send data to USB device:
-```kotlin
 
+
+
+
+=== Using Schedulers
+
+Each rx extension function can accept a `Scheduler` instance as an argument
+```kotlin
+// Custom Scheduler
+entityManager
+        .createQuery("SELECT i From Employee i order by modified desc", Employee::class.java)
+        .rxResultList(Schedulers.computation())
+        .subscribe {
+            // do something with List result
+        }
 ```
