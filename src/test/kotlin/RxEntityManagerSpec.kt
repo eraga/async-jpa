@@ -161,6 +161,7 @@ class RxEntityManagerSpec : Spek({
                             it.persist(Book("Transaction book 3"))
                             it.persist(Book("Transaction book 4"))
                         }
+                        .blockingGet()
 
                 assertNotNull(entityManager.rxFind(Book::class.java, 4))
             }
