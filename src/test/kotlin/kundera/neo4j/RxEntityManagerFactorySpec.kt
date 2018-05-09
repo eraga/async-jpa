@@ -1,4 +1,4 @@
-package hibernate
+package kundera.neo4j
 
 import net.eraga.rxjpa2.RxPersistence
 import net.eraga.rxjpa2.rxCreateEntityManager
@@ -11,15 +11,14 @@ import javax.persistence.EntityManagerFactory
 import javax.persistence.SynchronizationType
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertNotNull
 
 /**
  * Date: 08/05/2018
  * Time: 22:39
  */
 object RxEntityManagerFactorySpec : SubjectSpek<String>({
-    System.setProperty("org.jboss.logging.provider", "slf4j")
-
-    subject { "H2 Hibernate" }
+    subject { "neo4j Kundera" }
 
     var entityManager: EntityManager? = null
     lateinit var entityManagerFactory: EntityManagerFactory
@@ -42,41 +41,40 @@ object RxEntityManagerFactorySpec : SubjectSpek<String>({
         on("create manager with properties ") {
             it("should use properties") {
                 val properties = HashMap<String, Any>()
-                properties.put("org.hibernate.flushMode", "COMMIT")
+                properties.put("javax.persistence.jdbc.driver", "unknown_db")
                 entityManager = entityManagerFactory
                         .rxCreateEntityManager(properties)
                         .blockingGet()
-                assertEquals("COMMIT", entityManager?.properties?.get("org.hibernate.flushMode"))
+                assertEquals("unknown_db", entityManager?.properties?.get("javax.persistence.jdbc.driver"))
             }
         }
 
         on("create manager with synchronizationType ") {
-            it("should fail to create SYNCHRONIZED because we have no JTA") {
-                assertFails {
-                    entityManager = entityManagerFactory
-                            .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED)
-                            .blockingGet()
-                }
+            it("should create SYNCHRONIZED because kundera fucks up JTA") {
+
+                entityManager = entityManagerFactory
+                        .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED)
+                        .blockingGet()
+
+                assertNotNull(entityManager)
             }
 
-            it("should fail to create UNSYNCHRONIZED because we have no JTA") {
-                assertFails {
-                    entityManager = entityManagerFactory
-                            .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED)
-                            .blockingGet()
-                }
+            it("should create UNSYNCHRONIZED because kundera fucks up JTA") {
+                entityManager = entityManagerFactory
+                        .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED)
+                        .blockingGet()
+                assertNotNull(entityManager)
             }
         }
 
         on("create manager with properties and synchronizationType ") {
-            it("should also fail because we have no JTA") {
+            it("should also pass because kundera fucks up JTA") {
                 val properties = HashMap<String, Any>()
-                properties.put("javax.persistence.jdbc.driver", "unknown_db")
-                assertFails {
-                    entityManager = entityManagerFactory
-                            .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED, properties)
-                            .blockingGet()
-                }
+
+                entityManager = entityManagerFactory
+                        .rxCreateEntityManager(SynchronizationType.SYNCHRONIZED, properties)
+                        .blockingGet()
+                assertNotNull(entityManager)
 
             }
         }

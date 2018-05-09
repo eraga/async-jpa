@@ -3,6 +3,7 @@ import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import javax.persistence.FlushModeType
+import javax.persistence.Persistence
 
 /**
  * Date: 09/05/2018
@@ -14,50 +15,29 @@ object Main {
         lateinit var entityManager: EntityManager
         lateinit var entityManagerFactory: EntityManagerFactory
 
+        println(2)
         val properties = Properties()
-        entityManagerFactory = RxPersistence
-//                .createEntityManagerFactory("H2 Hibernate", properties)
-                .createEntityManagerFactory("H2 Kundera", properties)
-                .blockingGet()
+        entityManagerFactory = Persistence
+                .createEntityManagerFactory("HBase Kundera", properties)
+//                .blockingGet()
+        println(2)
 
         entityManager = entityManagerFactory
                 .rxCreateEntityManager()
-                .blockingGet().apply {
-                    flushMode = FlushModeType.COMMIT
-                }
-
-        println(entityManager.flushMode)
-
-//        entityManager
-//                .rxTransaction {
-//                    it.persist(Book("First book"))
-//                    it.persist(Book( "Second book"))
-//                    it.persist(Neo4jBook(3, "Third book"))
-//                    it.persist(Neo4jBook(4, "Fourth book"))
-//                }
-//                .blockingGet()?.printStackTrace()
-        val book = Book("rxPersistBook")
-
-        val error = entityManager
-                .rxPersist(book)
                 .blockingGet()
+        println(2)
+        entityManager
+                .rxTransaction {
+                    it.persist(Book("First book"))
+                    it.persist(Book("Second book"))
+                    it.persist(Book("Third book"))
+                    it.persist(Book("Fourth book"))
+                }
+                .blockingGet()?.printStackTrace()
+        println(2)
 
+        println(entityManager.rxFind(Book::class.java, 1).blockingGet())
 
-
-        if (error != null)
-            throw error
-
-        book.text = "persisted text"
-//        entityManager.transaction.begin()
-//        entityManager.flush()
-//        entityManager.transaction.commit()
-
-
-//        val bookNew = entityManager
-//                .rxFind(Book::class.java, 1)
-//                .blockingGet()
-//
-//        println(bookNew)
         entityManagerFactory.close()
     }
 }

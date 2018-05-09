@@ -75,9 +75,14 @@ dependencies {
 
     // NOSQL
     testImplementation group: 'com.impetus.kundera.client', name: 'kundera-neo4j', version: '3.12'
+    testImplementation group: 'com.impetus.kundera.client', name: 'kundera-hbase-v2', version: '3.12'
     testImplementation group: 'com.impetus.kundera.client', name: 'kundera-rdbms', version: '3.12'
 
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+
+    testImplementation ('org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2') {force = true}
+
+    testImplementation ('org.apache.hadoop:hadoop-common:2.7.2') {force = true} // required for org.apache.hadoop.util.StopWatch
 }
 
 compileKotlin {
