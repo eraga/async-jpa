@@ -4,10 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import javax.persistence.EntityExistsException
-import javax.persistence.EntityManager
-import javax.persistence.NoResultException
-import javax.persistence.TransactionRequiredException
+import javax.persistence.*
 
 
 /**
@@ -77,7 +74,8 @@ fun <T> EntityManager.rxMerge(
             it.onSuccess(result)
         }
     } catch (e: Exception) {
-        transaction.rollback()
+        if(transaction.isActive)
+            transaction.rollback()
         it.onError(e)
     }
 }.subscribeOn(scheduler ?: Schedulers.io())
@@ -108,7 +106,8 @@ fun EntityManager.rxRemove(
         }
         it.onComplete()
     } catch (e: Exception) {
-        transaction.rollback()
+        if(transaction.isActive)
+            transaction.rollback()
         it.onError(e)
     }
 }.subscribeOn(scheduler ?: Schedulers.io())
@@ -157,7 +156,36 @@ fun EntityManager.rxTransaction(
         }
         it.onComplete()
     } catch (e: Exception) {
-        transaction.rollback()
+        if(transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
+
+
+/**
+ * Synchronize the persistence context to the
+ * underlying database.
+ * @param scheduler the [Scheduler] to perform subscription actions on. Defaults to [Schedulers.io]
+ *
+ * @throws TransactionRequiredException if there is
+ *         no transaction or if the entity manager has not been
+ *         joined to the current transaction
+ * @throws PersistenceException if the flush fails
+ */
+fun EntityManager.rxFlush(
+        scheduler: Scheduler? = null
+): Completable = Completable.create {
+    try {
+        synchronized(this) {
+            transaction.begin()
+            flush()
+            transaction.commit()
+        }
+        it.onComplete()
+    } catch (e: Exception) {
+        if(transaction.isActive)
+            transaction.rollback()
         it.onError(e)
     }
 }.subscribeOn(scheduler ?: Schedulers.io())
