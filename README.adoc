@@ -129,3 +129,11 @@ entityManager
             // do something with List result
         }
 ```
+
+
+=== Using with Vertx
+
+Here is a brief example of using rxjava jpa2 helper library with Vertx DAO:
+https://stackoverflow.com/a/50244292/1824898
+
+That was an initial goal of writing this library :)
