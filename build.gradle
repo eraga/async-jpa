@@ -27,7 +27,7 @@ buildscript {
 
 }
 
-group 'net.eraga.rxjpa2'
+group 'net.eraga.jpa'
 version ext.version
 
 apply plugin: 'kotlin'
@@ -74,12 +74,19 @@ dependencies {
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.197'
 
     // NOSQL
-    testImplementation group: 'com.impetus.kundera.client', name: 'kundera-neo4j', version: '3.12'
-    testImplementation group: 'com.impetus.kundera.client', name: 'kundera-rdbms', version: '3.12'
+    testImplementation (group: 'com.impetus.kundera.client', name: 'kundera-neo4j', version: '3.12'){
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+    testImplementation (group: 'com.impetus.kundera.client', name: 'kundera-rdbms', version: '3.12'){
+        exclude group: 'com.google.guava', module: 'guava'
+    }
 
 
 
-    testImplementation(group: 'com.impetus.kundera.client', name: 'kundera-hbase-v2', version: '3.12')
+    testImplementation(group: 'com.impetus.kundera.client', name: 'kundera-hbase-v2', version: '3.12'){
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+    compile group: 'com.google.guava', name: 'guava', version: '16.0.1'
 
 
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'

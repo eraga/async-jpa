@@ -11,6 +11,7 @@ data class Neo4jBook(
         @Id
         @Column(name = "id")
         var id: Int = (Math.random() * 1000).toInt(),
-        var text: String = ""
+        var text: String = "",
+        var num: Int = (Math.random() * 100).toInt()
 ) {
 }

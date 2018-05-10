@@ -96,7 +96,7 @@ object RxPersistenceSpec : SubjectSpek<String>({
 
 })
 
-fun EntityManagerFactory.closeAndDeleteDBFiles(persistenceUnit: String) {
+internal fun EntityManagerFactory.closeAndDeleteDBFiles(persistenceUnit: String) {
     this.close()
     val puMetadata = KunderaMetadataManager.getPersistenceUnitMetadata((this as EntityManagerFactoryImpl)
             .kunderaMetadataInstance, persistenceUnit)
