@@ -1,11 +1,16 @@
 package kundera.neo4j
 
+import com.impetus.kundera.PersistenceProperties
+import com.impetus.kundera.metadata.KunderaMetadataManager
+import com.impetus.kundera.persistence.EntityManagerFactoryImpl
 import net.eraga.rxjpa2.RxPersistence
 import net.eraga.rxjpa2.rxCreateEntityManager
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.subject.SubjectSpek
+import org.neo4j.kernel.impl.util.FileUtils
+import java.io.File
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import javax.persistence.SynchronizationType
@@ -36,6 +41,15 @@ object RxEntityManagerFactorySpec : SubjectSpek<String>({
             entityManager = null
 
             entityManagerFactory.close()
+
+            val puMetadata = KunderaMetadataManager.getPersistenceUnitMetadata((entityManagerFactory as EntityManagerFactoryImpl)
+                    .kunderaMetadataInstance, subject)
+            val datastoreFilePath = puMetadata.getProperty(PersistenceProperties.KUNDERA_DATASTORE_FILE_PATH)
+
+
+            if (datastoreFilePath != null) {
+                FileUtils.deleteRecursively(File(datastoreFilePath))
+            }
         }
 
         on("create manager with properties ") {

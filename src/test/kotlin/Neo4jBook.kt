@@ -10,9 +10,7 @@ data class Neo4jBook(
         var title: String = "",
         @Id
         @Column(name = "id")
-        var id: Int = Math.random().toInt()
+        var id: Int = (Math.random() * 1000).toInt(),
+        var text: String = ""
 ) {
-
-
-    var text = ""
 }

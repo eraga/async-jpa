@@ -1,10 +1,15 @@
 package kundera.neo4j
 
+import com.impetus.kundera.PersistenceProperties
+import com.impetus.kundera.metadata.KunderaMetadataManager
+import com.impetus.kundera.persistence.EntityManagerFactoryImpl
 import net.eraga.rxjpa2.RxPersistence
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.subject.SubjectSpek
+import org.neo4j.kernel.impl.util.FileUtils
+import java.io.File
 import java.util.*
 import javax.persistence.EntityManagerFactory
 import javax.persistence.PersistenceException
@@ -27,7 +32,7 @@ object RxPersistenceSpec : SubjectSpek<String>({
 
                 val success = emf is EntityManagerFactory
 
-                if (success) emf.close()
+                if (success) emf.closeAndDeleteDBFiles(subject)
 
                 assertTrue { success }
             }
@@ -46,7 +51,7 @@ object RxPersistenceSpec : SubjectSpek<String>({
 
                 val success = emf is EntityManagerFactory
 
-                if (success) emf.close()
+                if (success) emf.closeAndDeleteDBFiles(subject)
 
                 assertTrue { success }
             }
@@ -88,4 +93,17 @@ object RxPersistenceSpec : SubjectSpek<String>({
     }
 
 
+
 })
+
+fun EntityManagerFactory.closeAndDeleteDBFiles(persistenceUnit: String) {
+    this.close()
+    val puMetadata = KunderaMetadataManager.getPersistenceUnitMetadata((this as EntityManagerFactoryImpl)
+            .kunderaMetadataInstance, persistenceUnit)
+    val datastoreFilePath = puMetadata.getProperty(PersistenceProperties.KUNDERA_DATASTORE_FILE_PATH)
+
+
+    if (datastoreFilePath != null) {
+        FileUtils.deleteRecursively(File(datastoreFilePath))
+    }
+}

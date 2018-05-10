@@ -63,11 +63,10 @@
 		<properties>
 			<property name="kundera.nodes" value="localhost" />
 			<property name="kundera.port" value="7474" />
-			<property name="kundera.datastore.file.path" value="target/imdb.db" />
+			<property name="kundera.datastore.file.path" value="build/neo4j.test.db" />
 			<property name="kundera.dialect" value="neo4j" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.neo4j.Neo4JClientFactory" />
-			<property name="kundera.ddl.auto.prepare" value="create-drop" />
-			<!--<property name="kundera.client.property" value="kunderaNeo4JTest.xml" />-->
+			<property name="kundera.client.property" value="kunderaNeo4JTest.xml" />
 			<property name="kundera.transaction.resource.class" value="com.impetus.client.neo4j.Neo4JTransaction" />
 		</properties>
 	</persistence-unit>

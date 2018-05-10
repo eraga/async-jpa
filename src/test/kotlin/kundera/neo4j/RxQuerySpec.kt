@@ -23,7 +23,7 @@ object RxQuerySpec : SubjectSpek<String>({
     lateinit var entityManager: EntityManager
     lateinit var entityManagerFactory: EntityManagerFactory
 
-    xgiven("$subject persistence unit") {
+    given("$subject persistence unit") {
         beforeEachTest {
             val properties = Properties()
             entityManagerFactory = RxPersistence
@@ -36,7 +36,7 @@ object RxQuerySpec : SubjectSpek<String>({
 
             entityManager
                     .rxTransaction {
-                        it.persist(Neo4jBook("First book"))
+                        it.persist(Neo4jBook("First book", id = 1))
                         it.persist(Neo4jBook("Second book"))
                         it.persist(Neo4jBook("Third book"))
                         it.persist(Neo4jBook("Fourth book"))
@@ -47,7 +47,7 @@ object RxQuerySpec : SubjectSpek<String>({
 
         afterEachTest {
             entityManager.close()
-            entityManagerFactory.close()
+            entityManagerFactory.closeAndDeleteDBFiles(subject)
         }
 
         on("executing typed queries") {
@@ -58,7 +58,7 @@ object RxQuerySpec : SubjectSpek<String>({
                                 "SELECT b From Neo4jBook b where b.title like :title",
                                 Neo4jBook::class.java
                         )
-                        .setParameter("title", "%book")
+                        .setParameter("title", "*book")
                         .rxResultList()
                         .blockingGet()
 
@@ -87,7 +87,7 @@ object RxQuerySpec : SubjectSpek<String>({
                         .createQuery(
                                 "SELECT b From Neo4jBook b where b.title like :title"
                         )
-                        .setParameter("title", "%book")
+                        .setParameter("title", "*book")
                         .rxResultList()
                         .blockingGet()
 
