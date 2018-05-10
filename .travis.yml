@@ -9,6 +9,9 @@ branches:
   only:
     - master
 
+before_script:
+  - ./deploy-test-env.sh
+
 cache:
   directories:
   - $HOME/.gradle
