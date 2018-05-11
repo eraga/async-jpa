@@ -1,4 +1,4 @@
-= RxJPA2 — RxJava JPA2 helper functions
+= Asynchronous JPA 2 with RxJava2 and Kotlin
 
 [link="https://travis-ci.org/eraga/rxjpa2"]
 image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
@@ -26,7 +26,7 @@ repositories {
 
 Add gradle dependency to your project:
 ```gradle
-compile "net.eraga.rxjpa2:helpers:1.0.0"
+compile "net.eraga.jpa.async:jpa2.1-rxjava2:2.1.0"
 ```
 
 Latest version is `1.0.0`
@@ -137,3 +137,53 @@ Here is a brief example of using rxjava jpa2 helper library with Vertx DAO:
 https://stackoverflow.com/a/50244292/1824898
 
 That was an initial goal of writing this library :)
+
+
+== Supported providers
+
+All providers should be supported. Following providers are tested with unit tests.
+
+.List of tested providers
+|===
+| API Level | JPA Provider | DB Engine | Comment
+
+|JPA 2.0
+|Hibernate
+|H2
+|
+
+|JPA 2.0
+|EclipseLink
+|H2
+|
+
+|JPA 2.1
+|Hibernate
+|H2
+|
+
+|JPA 2.1
+|EclipseLink
+|H2
+|
+
+|JPA 2.1
+|Kundera
+|neo4j
+|
+
+|JPA 2.1
+|Kundera
+|HBase
+|
+
+|JPA 2.1
+|Kundera
+|RDBMS
+|Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
+while exactly same package of Hibernate (which it uses as a backend)
+passes all the tests.
+|===
+
+
+

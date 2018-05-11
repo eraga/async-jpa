@@ -99,6 +99,9 @@ uploadArchives {
     configuration = configurations.archives
     repositories.mavenDeployer {
         Properties props = new Properties()
+        if(!new File("$project.projectDir/deploy.properties").exists())
+            return
+
         props.load(new FileInputStream("$project.projectDir/deploy.properties"))
         props.each { prop ->
             project.ext.set(prop.key, prop.value)
@@ -115,9 +118,9 @@ uploadArchives {
 
         pom.project {
             //noinspection GroovyAssignabilityCheck
-            name 'Asynchronous JPA2.1 (RxJava2)'
+            name 'Asynchronous JPA 2.0 (RxJava2)'
             packaging 'jar'
-            description 'RxJava2 wrappers for blocking JPA2.1 operations using Kotlin extension functions'
+            description 'RxJava2 wrappers for blocking JPA 2.0 operations using Kotlin extension functions'
             url 'https://github.com/eraga/async-jpa'
 
             scm {
