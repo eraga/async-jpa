@@ -1,7 +1,7 @@
 = Asynchronous JPA 2 with RxJava2 and Kotlin
 
-[link="https://travis-ci.org/eraga/rxjpa2"]
-image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
+[link="https://travis-ci.org/eraga/async-jpa"]
+image::https://api.travis-ci.org/eraga/async-jpa.svg?branch=master[]
 
 
 Library provides RxJava2 wrappers for blocking JPA2 operations written with
