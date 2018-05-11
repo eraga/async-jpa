@@ -95,7 +95,7 @@ object RxQuerySpec : SubjectSpek<String>({
 
             it("should fail rxFirstResult as it is unsupported by Kundera") {
                 assertFailsWith<UnsupportedOperationException> {
-                    val result = entityManager
+                    entityManager
                             .createQuery(
                                     "SELECT b From Book b where b.title = :title"
                             )

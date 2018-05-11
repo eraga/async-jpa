@@ -2,7 +2,7 @@ buildscript {
     ext {
         kotlinVersion = '1.2.41'
         rxjavaVersion = '2.1.13'
-        jpa2apiVersion = '1.0.0.Final'
+        javaeeApiVersion = '7.0'
 
         spekVersion = "1.1.5"
         junitPlatformVersion = "1.0.0"
@@ -48,7 +48,7 @@ junitPlatform {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
-    compile 'javax:javaee-api:7.0'
+    compile "javax:javaee-api:$javaeeApiVersion"
 //    compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
 

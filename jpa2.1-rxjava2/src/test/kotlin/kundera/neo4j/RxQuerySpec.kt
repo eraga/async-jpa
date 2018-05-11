@@ -96,7 +96,7 @@ object RxQuerySpec : SubjectSpek<String>({
             it("should fail rxFirstResult as it is unsupported by Kundera") {
                 assertFailsWith<UnsupportedOperationException> {
 //                    java.lang.UnsupportedOperationException: getFirstResult is unsupported by Kundera
-                    val result = entityManager
+                    entityManager
                             .createQuery(
                                     "SELECT b From Neo4jBook b where b.title = :title"
                             )

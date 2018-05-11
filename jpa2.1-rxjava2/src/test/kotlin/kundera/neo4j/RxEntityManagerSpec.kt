@@ -1,17 +1,11 @@
 package kundera.neo4j
 
 import Neo4jBook
-import com.impetus.kundera.PersistenceProperties
-import com.impetus.kundera.metadata.KunderaMetadataManager
-import com.impetus.kundera.persistence.EntityManagerFactoryImpl
 import net.eraga.jpa.async.*
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.subject.SubjectSpek
-import org.neo4j.kernel.impl.util.FileUtils
-import org.slf4j.LoggerFactory
-import java.io.File
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import kotlin.test.*
@@ -22,7 +16,6 @@ import kotlin.test.*
  */
 object RxEntityManagerSpec : SubjectSpek<String>({
     System.setProperty("org.jboss.logging.provider", "slf4j")
-    val log = LoggerFactory.getLogger("RxEntityManagerSpec")
 
     subject { "neo4j Kundera" }
 
