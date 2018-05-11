@@ -1,4 +1,4 @@
-= RxJPA2 — RxJava JPA2 helper functions
+= Asynchronous JPA 2 with RxJava2 and Kotlin
 
 [link="https://travis-ci.org/eraga/rxjpa2"]
 image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
@@ -26,7 +26,7 @@ repositories {
 
 Add gradle dependency to your project:
 ```gradle
-compile "net.eraga.rxjpa2:helpers:1.0.0"
+compile "net.eraga.jpa.async:jpa2.1-rxjava2:2.1.0"
 ```
 
 Latest version is `1.0.0`
