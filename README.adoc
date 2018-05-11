@@ -8,8 +8,8 @@ Library provides RxJava2 wrappers for blocking JPA2 operations written wit
  Kotlin extension functions. Though it is pretty small in size it brings agility of
  kotlin and RxJava to the full power of JPA.
 
- **Hibernate 5.2.5.Final** and **EclipseLink 2.6.5**, but should work with any
-other JPA 2 provider. More information in
+**Hibernate 5.2.5.Final** and **EclipseLink 2.6.5**, but should work with any
+other JPA 2 provider. Refer to <<supported-providers,supported providers>> for more information.
 
 == How to use
 
@@ -141,7 +141,7 @@ https://stackoverflow.com/a/50244292/1824898
 
 That was an initial goal of writing this library :)
 
-
+[#supported-providers]
 == Supported providers
 
 All providers should be supported. Following providers are tested with unit tests.
@@ -186,8 +186,7 @@ All providers should be supported. Following providers are tested with unit test
 |RDBMS
 |===
 
-[NOTE]
-Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
+WARNING: Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
 while exactly same package of Hibernate (which it uses as a backend)
 passes all the tests.
 
