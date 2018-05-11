@@ -8,8 +8,8 @@ Library provides RxJava2 wrappers for blocking JPA2 operations written wit
  Kotlin extension functions. Though it is pretty small in size it brings agility of
  kotlin and RxJava to the full power of JPA.
 
-Tested providers are **Hibernate 5.2.12.Final** and **EclipseLink 2.6.5**, but should work with any
-other JPA2 provider.
+ **Hibernate 5.2.5.Final** and **EclipseLink 2.6.5**, but should work with any
+other JPA 2 provider. More information in
 
 == How to use
 
@@ -26,10 +26,13 @@ repositories {
 
 Add gradle dependency to your project:
 ```gradle
+// For JPA 2.1
 compile "net.eraga.jpa.async:jpa2.1-rxjava2:2.1.0"
+
+// For JPA 2.0 (Required for those provaiders that are not compatible with JPA 2.1)
+compile "net.eraga.jpa.async:jpa2.0-rxjava2:2.0.0"
 ```
 
-Latest version is `1.0.0`
 
 
 === Usage
@@ -145,45 +148,47 @@ All providers should be supported. Following providers are tested with unit test
 
 .List of tested providers
 |===
-| API Level | JPA Provider | DB Engine | Comment
+| API Level | JPA Provider | Provider version | DB Engine |
 
 |JPA 2.0
 |Hibernate
+|4.2.2.Final
 |H2
-|
 
 |JPA 2.0
 |EclipseLink
+|2.4.2
 |H2
-|
 
 |JPA 2.1
 |Hibernate
+|5.2.5.Final
 |H2
-|
 
 |JPA 2.1
 |EclipseLink
+|2.6.5
 |H2
-|
 
 |JPA 2.1
 |Kundera
+|3.12
 |neo4j
-|
 
 |JPA 2.1
 |Kundera
+|3.12
 |HBase
-|
 
 |JPA 2.1
 |Kundera
+|3.12
 |RDBMS
-|Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
-while exactly same package of Hibernate (which it uses as a backend)
-passes all the tests.
 |===
 
+[NOTE]
+Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
+while exactly same package of Hibernate (which it uses as a backend)
+passes all the tests.
 
 
