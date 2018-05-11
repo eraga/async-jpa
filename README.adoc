@@ -148,7 +148,7 @@ All providers should be supported. Following providers are tested with unit test
 
 .List of tested providers
 |===
-| API Level | JPA Provider | Provider version | DB Engine |
+| API Level | JPA Provider | Provider version | DB Engine
 
 |JPA 2.0
 |Hibernate
