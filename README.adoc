@@ -4,7 +4,7 @@
 image::https://api.travis-ci.org/eraga/rxjpa2.svg?branch=master[]
 
 
-Library provides RxJava2 wrappers for blocking JPA2 operations written wit
+Library provides RxJava2 wrappers for blocking JPA2 operations written with
  Kotlin extension functions. Though it is pretty small in size it brings agility of
  kotlin and RxJava to the full power of JPA.
 
