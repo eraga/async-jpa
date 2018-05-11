@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<persistence-unit name="H2 Hibernate" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!-- add classes -->
+		<class>Book</class>
+
+		<properties>
+			<!-- Configuring JDBC properties -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+
+			<!-- Hibernate properties -->
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.format_sql" value="false"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<!--<property name="hibernate.connection.pool_size" value="1"/>-->
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="H2 EclipseLink" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<!-- add classes -->
+		<class>Book</class>
+
+		<properties>
+			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+
+			<!-- Configuring JDBC properties -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+
+			<property name="eclipselink.logging.level.sql" value="FINE"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="H2 OpenJpa" transaction-type="RESOURCE_LOCAL">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<!-- add classes -->
+		<class>JavaBook</class>
+
+		<properties>
+			<!-- Configuring JDBC properties -->
+			<!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>-->
+			<!--<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>-->
+			<!--<property name="javax.persistence.schema-generation.database.action"-->
+			          <!--value="drop-and-create" />-->
+
+			<!--<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>-->
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+			<property name="openjpa.ConnectionURL"
+			          value="jdbc:h2:mem:test"/>
+			<property name="openjpa.ConnectionDriverName"
+			           value="org.h2.Driver"/>
+
+			<property name="openjpa.Log"
+			          value="DefaultLevel=TRACE,SQL=TRACE" />
+
+		</properties>
+	</persistence-unit>
+</persistence>
