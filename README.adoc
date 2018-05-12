@@ -1,15 +1,18 @@
 = Asynchronous JPA 2 with RxJava2 and Kotlin
 
-[link="https://travis-ci.org/eraga/async-jpa"]
-image::https://api.travis-ci.org/eraga/async-jpa.svg?branch=master[]
+[float=left]
+image:https://img.shields.io/travis/eraga/async-jpa/master.svg["Travis CI",link="https://travis-ci.org/eraga/async-jpa"]
+image:https://img.shields.io/github/license/eraga/async-jpa.svg["GitHub license",link="https://github.com/eraga/async-jpa/blob/master/LICENSE"]
+image:https://img.shields.io/github/stars/eraga/async-jpa.svg["GitHub stars",link="https://github.com/eraga/async-jpa/stargazers"]
+image:https://img.shields.io/github/languages/top/eraga/async-jpa.svg[GitHub top language]
 
 
-Library provides RxJava2 wrappers for blocking JPA2 operations written with
+Library provides RxJava2 wrappers for blocking JPA 2 operations written with
  Kotlin extension functions. Though it is pretty small in size it brings agility of
  kotlin and RxJava to the full power of JPA.
 
 **Hibernate 5.2.5.Final** and **EclipseLink 2.6.5**, but should work with any
-other JPA 2 provider. Refer to <<supported-providers,supported providers>> for more information.
+other JPA 2 provider. Refer to <<supported-providers,tested providers>> for more information.
 
 == How to use
 
@@ -29,7 +32,7 @@ Add gradle dependency to your project:
 // For JPA 2.1
 compile "net.eraga.jpa.async:jpa2.1-rxjava2:2.1.0"
 
-// For JPA 2.0 (Required for those provaiders that are not compatible with JPA 2.1)
+// For JPA 2.0 (Required for those providers that are not compatible with JPA 2.1)
 compile "net.eraga.jpa.async:jpa2.0-rxjava2:2.0.0"
 ```
 
@@ -142,9 +145,9 @@ https://stackoverflow.com/a/50244292/1824898
 That was an initial goal of writing this library :)
 
 [#supported-providers]
-== Supported providers
+== Tested providers
 
-All providers should be supported. Following providers are tested with unit tests.
+All providers should be supported. Following providers had been tested with unit tests.
 
 .List of tested providers
 |===
@@ -190,4 +193,5 @@ WARNING: Kundera-RDBMS seems to be buggy, as it doesn't pass certain tests
 while exactly same package of Hibernate (which it uses as a backend)
 passes all the tests.
 
+=== Known issues
 
