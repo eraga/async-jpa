@@ -30,12 +30,13 @@ repositories {
 Add gradle dependency to your project:
 ```gradle
 // For JPA 2.1
-compile "net.eraga.jpa.async:jpa2.1-rxjava2:2.1.0"
+compile "net.eraga.jpa.async:jpa2.1-rxjava2:1.1"
 
 // For JPA 2.0 (Required for those providers that are not compatible with JPA 2.1)
-compile "net.eraga.jpa.async:jpa2.0-rxjava2:2.0.0"
+compile "net.eraga.jpa.async:jpa2.0-rxjava2:1.1"
 ```
 
+NOTE: Latest version is `1.1`
 
 
 === Usage
