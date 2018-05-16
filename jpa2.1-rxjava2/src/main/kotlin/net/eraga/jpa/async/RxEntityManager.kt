@@ -41,7 +41,7 @@ fun EntityManager.rxPersist(
         }
         it.onComplete()
     } catch (e: Exception) {
-        if(transaction.isActive)
+        if (transaction.isActive)
             transaction.rollback()
         it.onError(e)
     }
@@ -74,7 +74,7 @@ fun <T> EntityManager.rxMerge(
             it.onSuccess(result)
         }
     } catch (e: Exception) {
-        if(transaction.isActive)
+        if (transaction.isActive)
             transaction.rollback()
         it.onError(e)
     }
@@ -106,7 +106,7 @@ fun EntityManager.rxRemove(
         }
         it.onComplete()
     } catch (e: Exception) {
-        if(transaction.isActive)
+        if (transaction.isActive)
             transaction.rollback()
         it.onError(e)
     }
@@ -133,8 +133,8 @@ fun <T> EntityManager.rxFind(
         entityClass: Class<T>,
         primaryKey: Any,
         scheduler: Scheduler? = null): Single<T> = blockingSingle(scheduler) {
-    this.find(entityClass, primaryKey) ?:
-            throw NoResultException("No entries found for $entityClass with primary key $primaryKey")
+    this.find(entityClass, primaryKey)
+            ?: throw NoResultException("No entries found for $entityClass with primary key $primaryKey")
 }
 
 /**
@@ -156,7 +156,7 @@ fun EntityManager.rxTransaction(
         }
         it.onComplete()
     } catch (e: Exception) {
-        if(transaction.isActive)
+        if (transaction.isActive)
             transaction.rollback()
         it.onError(e)
     }
@@ -180,6 +180,196 @@ fun EntityManager.rxFlush(
         synchronized(this) {
             transaction.begin()
             flush()
+            transaction.commit()
+        }
+        it.onComplete()
+    } catch (e: Exception) {
+        if (transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
+
+
+/**
+ * Refresh the state of the instance from the database,
+ * overwriting changes made to the entity, if any.
+ * @param entity  entity instance
+ * @throws IllegalArgumentException if the instance is not
+ * an entity or the entity is not managed
+ * @throws TransactionRequiredException if there is no
+ * transaction when invoked on a container-managed
+ * entity manager of type `PersistenceContextType.TRANSACTION`
+ * @throws EntityNotFoundException if the entity no longer
+ * exists in the database
+ */
+fun EntityManager.rxRefresh(
+        entity: Any,
+        scheduler: Scheduler? = null
+): Completable = Completable.create {
+    try {
+        synchronized(this) {
+            transaction.begin()
+            refresh(entity)
+            transaction.commit()
+        }
+        it.onComplete()
+    } catch (e: Exception) {
+        if (transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
+
+/**
+ * Refresh the state of the instance from the database, using
+ * the specified properties, and overwriting changes made to
+ * the entity, if any.
+ *
+ *  If a vendor-specific property or hint is not recognized,
+ * it is silently ignored.
+ * @param entity  entity instance
+ * @param properties  standard and vendor-specific properties
+ * and hints
+ * @throws IllegalArgumentException if the instance is not
+ * an entity or the entity is not managed
+ * @throws TransactionRequiredException if there is no
+ * transaction when invoked on a container-managed
+ * entity manager of type `PersistenceContextType.TRANSACTION`
+ * @throws EntityNotFoundException if the entity no longer
+ * exists in the database
+ * @since Java Persistence 2.0
+ */
+fun EntityManager.rxRefresh(
+        entity: Any,
+        properties: Map<String, Any>,
+        scheduler: Scheduler? = null
+): Completable = Completable.create {
+    try {
+        synchronized(this) {
+            transaction.begin()
+            refresh(entity, properties)
+            transaction.commit()
+        }
+        it.onComplete()
+    } catch (e: Exception) {
+        if (transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
+
+/**
+ * Refresh the state of the instance from the database,
+ * overwriting changes made to the entity, if any, and
+ * lock it with respect to given lock mode type.
+ *
+ * If the lock mode type is pessimistic and the entity instance
+ * is found but cannot be locked:
+ *
+ *  *  the `PessimisticLockException` will be thrown if the database
+ * locking failure causes transaction-level rollback
+ *  *  the `LockTimeoutException` will be thrown if the
+ * database locking failure causes only statement-level
+ * rollback.
+ *
+ * @param entity  entity instance
+ * @param lockMode  lock mode
+ * @throws IllegalArgumentException if the instance is not
+ * an entity or the entity is not managed
+ * @throws TransactionRequiredException if invoked on a
+ * container-managed entity manager of type
+ * `PersistenceContextType.TRANSACTION` when there is
+ * no transaction; if invoked on an extended entity manager when
+ * there is no transaction and a lock mode other than `NONE`
+ * has been specified; or if invoked on an extended entity manager
+ * that has not been joined to the current transaction and a
+ * lock mode other than `NONE` has been specified
+ * @throws EntityNotFoundException if the entity no longer exists
+ * in the database
+ * @throws PessimisticLockException if pessimistic locking fails
+ * and the transaction is rolled back
+ * @throws LockTimeoutException if pessimistic locking fails and
+ * only the statement is rolled back
+ * @throws PersistenceException if an unsupported lock call
+ * is made
+ * @since Java Persistence 2.0
+ */
+fun EntityManager.rxRefresh(
+        entity: Any,
+        lockMode: LockModeType,
+        scheduler: Scheduler? = null
+): Completable = Completable.create {
+    try {
+        synchronized(this) {
+            transaction.begin()
+            refresh(entity, lockMode)
+            transaction.commit()
+        }
+        it.onComplete()
+    } catch (e: Exception) {
+        if(transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
+
+/**
+ * Refresh the state of the instance from the database,
+ * overwriting changes made to the entity, if any, and
+ * lock it with respect to given lock mode type and with
+ * specified properties.
+ *
+ * If the lock mode type is pessimistic and the entity instance
+ * is found but cannot be locked:
+ *
+ *  *  the `PessimisticLockException` will be thrown if the database
+ * locking failure causes transaction-level rollback
+ *  *  the `LockTimeoutException` will be thrown if the database
+ * locking failure causes only statement-level rollback
+ *
+ *
+ * If a vendor-specific property or hint is not recognized,
+ * it is silently ignored.
+ *
+ * Portable applications should not rely on the standard timeout
+ * hint. Depending on the database in use and the locking
+ * mechanisms used by the provider, the hint may or may not
+ * be observed.
+ * @param entity  entity instance
+ * @param lockMode  lock mode
+ * @param properties  standard and vendor-specific properties
+ * and hints
+ * @throws IllegalArgumentException if the instance is not
+ * an entity or the entity is not managed
+ * @throws TransactionRequiredException if invoked on a
+ * container-managed entity manager of type
+ * `PersistenceContextType.TRANSACTION` when there is
+ * no transaction; if invoked on an extended entity manager when
+ * there is no transaction and a lock mode other than `NONE`
+ * has been specified; or if invoked on an extended entity manager
+ * that has not been joined to the current transaction and a
+ * lock mode other than `NONE` has been specified
+ * @throws EntityNotFoundException if the entity no longer exists
+ * in the database
+ * @throws PessimisticLockException if pessimistic locking fails
+ * and the transaction is rolled back
+ * @throws LockTimeoutException if pessimistic locking fails and
+ * only the statement is rolled back
+ * @throws PersistenceException if an unsupported lock call
+ * is made
+ * @since Java Persistence 2.0
+ */
+fun EntityManager.rxRefresh(
+        entity: Any,
+        lockMode: LockModeType,
+        properties: Map<String, Any>,
+        scheduler: Scheduler? = null
+): Completable = Completable.create {
+    try {
+        synchronized(this) {
+            transaction.begin()
+            refresh(entity, lockMode, properties)
             transaction.commit()
         }
         it.onComplete()
