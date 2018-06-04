@@ -179,5 +179,20 @@ object RxEntityManagerSpec : SubjectSpek<TestSubject>({
                 assertNotNull(entityManager.rxFind(Book::class.java, 4))
             }
         }
+
+
+        on("rxTransaction returning Maybe") {
+            it("should store a book in transaction and return it") {
+                val thisBook = entityManager
+                        .rxTransaction<Book> {
+                            val book = Book("Transaction book 123")
+                            it.persist(book)
+                            book
+                        }
+                        .blockingGet()
+
+                assertEquals("Transaction book 123", thisBook.title)
+            }
+        }
     }
 })

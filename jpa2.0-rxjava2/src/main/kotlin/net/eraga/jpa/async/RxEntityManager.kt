@@ -1,6 +1,7 @@
 package net.eraga.jpa.async
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -162,6 +163,40 @@ fun EntityManager.rxTransaction(
     }
 }.subscribeOn(scheduler ?: Schedulers.io())
 
+
+/**
+ * Execute code block inside of transaction.
+ * @param scheduler the [Scheduler] to perform subscription actions on. Defaults to [Schedulers.io]
+ * @param f code block to execute, receives a em [EntityManager] instance as an argument and returns
+ * resulting instance
+ *
+ * @throws IllegalStateException if transaction is already active
+ */
+fun <T>EntityManager.rxTransaction(
+        scheduler: Scheduler? = null,
+        f: (em: EntityManager) -> T
+): Maybe<T> = Maybe.create<T> {
+    try {
+        var result: T? = null
+
+        synchronized(this) {
+            transaction.begin()
+            result = f(this)
+            transaction.commit()
+        }
+
+        if(result == null) {
+            it.onComplete()
+        } else {
+            it.onSuccess(result as T)
+        }
+
+    } catch (e: Exception) {
+        if (transaction.isActive)
+            transaction.rollback()
+        it.onError(e)
+    }
+}.subscribeOn(scheduler ?: Schedulers.io())
 
 /**
  * Synchronize the persistence context to the
