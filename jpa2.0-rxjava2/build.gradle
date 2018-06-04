@@ -14,31 +14,27 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
         classpath 'net.researchgate:gradle-release:2.4.0'
 
     }
+}
+
+plugins {
+    id 'com.adarshr.test-logger' version '1.2.0'
 }
 
 group 'net.eraga.jpa.async'
 version "$version"
 
 apply plugin: 'kotlin'
-apply plugin: "org.junit.platform.gradle.plugin"
 apply plugin: 'net.researchgate.release'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
+
+
 repositories {
     mavenCentral()
-}
-
-junitPlatform {
-    filters {
-        engines {
-            include 'spek'
-        }
-    }
 }
 
 dependencies {
@@ -93,7 +89,14 @@ signing {
     sign configurations.archives
 }
 
+test {
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED", "standardError"
+    }
 
+    useJUnitPlatform {
+    }
+}
 
 uploadArchives {
     configuration = configurations.archives
