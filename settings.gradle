@@ -1,4 +1,5 @@
 rootProject.name = 'async-jpa'
+include 'jpa2.2-rxjava2'
 include 'jpa2.1-rxjava2'
 include 'jpa2.0-rxjava2'
 
