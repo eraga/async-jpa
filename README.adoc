@@ -39,7 +39,7 @@ compile "net.eraga.jpa.async:jpa2.1-rxjava2:1.2"
 compile "net.eraga.jpa.async:jpa2.0-rxjava2:1.2"
 ```
 
-NOTE: Latest version is `1.1`
+NOTE: Latest version is `1.2`
 
 
 === Usage
